@@ -1,12 +1,28 @@
-name: helo-world
+name: Java CI
 on: push
 jobs:
-  my-job:
+  Clown-down:
     runs-on: ubuntu-latest
     container: gradle:6-jdk11
     steps:
       - name: Clone down
         uses: actions/checkout@v2
+      - name: Upload all code
+        uses: actions/upload-artifact@v2
+        with:
+          name: code
+          path: .
+  Build:
+    needs:
+      - Clown-down
+    runs-on: ubuntu-latest
+    container: gradle:6-jdk11
+    steps:
+      - name: Download code
+        uses: actions/download-artifact@v2
+        with:
+          name: code
+          path: .
       - name: Build
         run: ci/build-app.sh
       - name: Test
